@@ -12,6 +12,13 @@ if ([string]::IsNullOrWhiteSpace($env:INPUT_MODULEPATH)) {
 $Modules | ForEach-Object {
     Write-Host "Publishing '$_' to PowerShell Gallery"
 
-    Publish-Module -Path $_ -NuGetApiKey $env:INPUT_NUGETAPIKEY
+    $Params = @{
+        Path                       = $_
+        Repository                 = "PSGallery"
+        ApiKey                     = $env:INPUT_NUGETAPIKEY
+        SkipModuleManifestValidate = $true
+    }
+
+    Publish-PSResource @Params
     Write-Host "'$_' published to PowerShell Gallery"
 }
